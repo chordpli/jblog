@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="blog">
+	
+	<select id="BlogOneData" parameterType="String" resultType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			select b.id id
+			        ,b.blog_title blogTitle
+			        ,b.logo_file logoFile
+			        ,u.user_name userName
+			        ,c.cate_name cateName
+			        ,p.post_title postTitle
+			        ,p.reg_date postRegDate
+			        ,p.post_content postContent
+			from users u, blog b, category c, post p
+			where u.id = b.id
+			and b.id = c.id
+			and c.cate_no = p.cate_no
+			and b.id = #{id}
+		]]>
+	</select>
+	
+	<select id="getLatelyPosting" parameterType="String" resultType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			select a.userName userName
+			        ,a.postTitle postTitle
+			        ,a.postRegDate postRegDate
+			        ,a.postContent postContent
+			from (select rownum 
+			            ,u.user_name userName
+			            ,p.post_title postTitle
+			            ,p.reg_date postRegDate
+			            ,p.post_content postContent
+			        from users u, blog b, category c, post p
+			        where u.id = b.id
+			        and b.id = c.id
+			        and c.cate_no = p.cate_no
+			        and b.id = #{id}
+			        order by p.reg_date desc)a
+			where rownum = 1
+		]]>
+	</select>
+	
+	<select id="getBlogCateList" parameterType="String" resultType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			select cate_name cateName
+			from category c
+			where id = #{id}
+		]]>
+	</select>
+	
+<!-- 	<select id="getBlogPostList" parameterType="map" resultType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			select p.post_title postTitle
+			        ,p.reg_date postRegDate
+			        ,c.cate_name cateName
+			from post p, category c
+			where c.cate_no = p.cate_no
+			and c.id = #{id}
+		]]>
+			<if test = "cateName != null">
+				<![CDATA[
+					and c.cate_name = #{cateName}
+				]]>
+			</if>
+			<if test = "cateName == null">
+				<![CDATA[
+					and c.cate_name = '미분류'
+				]]>
+			</if>
+	</select> -->
+	
+		<select id="getBlogPostList" parameterType="map" resultType="com.javaex.vo.BlogVo">
+			<![CDATA[
+				select p.post_title postTitle
+				        ,p.reg_date postRegDate
+				        ,c.cate_name cateName
+				from post p, category c
+				where c.cate_no = p.cate_no
+				and c.id = #{id}
+			]]>
+				<choose>
+					<when test="cateName != null">
+						<![CDATA[
+							and c.cate_name = #{cateName}
+						]]>
+					</when>
+					<otherwise>
+						<![CDATA[
+							and c.cate_name = '미분류'
+						]]>
+					</otherwise>
+				</choose>
+		</select>
+
+	
+</mapper>

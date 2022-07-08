@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="category">
+
+	<insert id="insertBasicCategory" parameterType="String" >
+		insert into category
+		values(seq_category_no.nextval, #{id}, "미분류", "기본으로 만들어지는 카테고리 입니다.", sysdate)
+	</insert>
+
+</mapper>
