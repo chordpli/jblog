@@ -166,7 +166,7 @@
 		]]>
 	</select>	
 	<!-- 카테고리 원하는 글 -->
-	<select id="getReadPosting" parameterType="com.javaex.vo.BlogVo" resultType="com.javaex.vo.BlogVo">
+	<select id="getReadPosting" parameterType="map" resultType="com.javaex.vo.BlogVo">
 		<![CDATA[
 			select u.user_name userName
 	            ,p.post_title postTitle
@@ -177,7 +177,6 @@
 	        and b.id = c.id
 	        and c.cate_no = p.cate_no
 	        and b.id = #{id}
-	        and c.cate_no = #{cateNo}
 	        and p.post_no = #{postNo}
 		]]>
 	</select>	

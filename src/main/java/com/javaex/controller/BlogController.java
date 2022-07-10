@@ -36,7 +36,7 @@ public class BlogController {
 	
 	///////////////////////////////// 블로그 메인 /////////////////////////////////
 	// 블로그 메인
-		@RequestMapping(value = {"/{id}", "/{id}/{cateNo}", "/{id}/{postNo}"}, method = {RequestMethod.GET, RequestMethod.POST})
+		@RequestMapping(value = {"/{id}", "/{id}/{cateNo}/{postNo}", "/{id}/{cateNo}"}, method = {RequestMethod.GET, RequestMethod.POST})
 		public String blog(@PathVariable("id") String id
 							,@PathVariable(value = "cateNo", required = false) Integer cateNo
 							,@PathVariable(value = "postNo", required = false) Integer postNo
@@ -52,6 +52,7 @@ public class BlogController {
 				bMap = bService.getBlogDataInCategory(id, cateNo);
 			}else {
 				System.out.println("BlogController > getBlogDataInCategory");
+				System.out.println("cateNo : "  + cateNo);
 				bMap = bService.getBlogDataInCategory(id, cateNo, postNo);
 			}
 			

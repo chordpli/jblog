@@ -96,7 +96,13 @@ public class BlogService {
 		Map<String, Object> cateMap = new HashMap<String, Object>();
 		BlogVo Post;
 		cateMap.put("id", id);
-		cateMap.put("cateNo", cateNo);
+		
+		if(cateNo == null) {
+			cateNo = bDao.getFirstCategory(id).getCateNo();
+			cateMap.put("cateNo", cateNo);
+		}else {
+			cateMap.put("cateNo", cateNo);
+		}
 		
 		cateMap.put("postNo", postNo);
 		Post = bDao.getReadPosting(cateMap);

@@ -81,7 +81,7 @@
 						
 						<c:forEach items="${blog.postList}" var = "post">
 							<tr>
-								<td class="text-left"><a href="${pageContext.request.contextPath}/${id }/${post.postNo }">${post.postTitle }</a></td>
+								<td class="text-left"><a href="${pageContext.request.contextPath}/${id }/${cateNo }/${post.postNo }">${post.postTitle }</a></td>
 								<td class="text-right">${post.postRegDate }</td>
 							</tr>
 						</c:forEach>
