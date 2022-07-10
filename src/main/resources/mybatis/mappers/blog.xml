@@ -2,97 +2,198 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="blog">
+
+	<!-- 회원가입 블로그 생성 -->
+	<insert id="createBlog" parameterType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			insert into blog
+			values (#{id}, '님의 블로그입니다.', 'spring-logo.jpg')
+		]]>
+	</insert>
 	
+	<select id="getBlogDataForUpdateTitle" parameterType="com.javaex.vo.BlogVo" resultType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			select id
+			        ,blog_title blogTitle
+			from blog
+			where id = #{id}
+		]]>
+	</select>
+	
+	<update id="updatecBlogTitle" parameterType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			update blog
+			set blog_title = #{blogTitle}
+			where id = #{id}
+		]]>
+	</update>
+	
+	<!-- 블로그 메인 -->
 	<select id="BlogOneData" parameterType="String" resultType="com.javaex.vo.BlogVo">
 		<![CDATA[
 			select b.id id
 			        ,b.blog_title blogTitle
 			        ,b.logo_file logoFile
 			        ,u.user_name userName
-			        ,c.cate_name cateName
-			        ,p.post_title postTitle
-			        ,p.reg_date postRegDate
-			        ,p.post_content postContent
-			from users u, blog b, category c, post p
+			from users u, blog b
 			where u.id = b.id
-			and b.id = c.id
-			and c.cate_no = p.cate_no
 			and b.id = #{id}
 		]]>
 	</select>
 	
 	<select id="getLatelyPosting" parameterType="String" resultType="com.javaex.vo.BlogVo">
 		<![CDATA[
-			select a.userName userName
+			select userName
+			        ,postTitle
+			        ,postRegDate
+			        ,postContent
+			from(select rownum rn
+			        ,a.userName userName
 			        ,a.postTitle postTitle
 			        ,a.postRegDate postRegDate
 			        ,a.postContent postContent
-			from (select rownum 
-			            ,u.user_name userName
-			            ,p.post_title postTitle
-			            ,p.reg_date postRegDate
-			            ,p.post_content postContent
-			        from users u, blog b, category c, post p
-			        where u.id = b.id
-			        and b.id = c.id
-			        and c.cate_no = p.cate_no
-			        and b.id = #{id}
-			        order by p.reg_date desc)a
+				from (select u.user_name userName
+				            ,p.post_title postTitle
+				            ,p.reg_date postRegDate
+				            ,p.post_content postContent
+				        from users u, blog b, category c, post p
+				        where u.id = b.id
+				        and b.id = c.id
+				        and c.cate_no = p.cate_no
+				        and b.id = #{id}
+				        order by p.reg_date desc)a
+			        )
 			where rownum = 1
 		]]>
 	</select>
 	
-	<select id="getBlogCateList" parameterType="String" resultType="com.javaex.vo.BlogVo">
+	<select id="getBlogCateList" parameterType="String" resultType="com.javaex.vo.CategoryVo">
 		<![CDATA[
-			select cate_name cateName
+			select cate_no cateNo
+					,cate_name cateName
 			from category c
 			where id = #{id}
+			order by cate_No desc
 		]]>
 	</select>
 	
-<!-- 	<select id="getBlogPostList" parameterType="map" resultType="com.javaex.vo.BlogVo">
+	<!-- 최초 블로그 카테고리 불러오기  -->
+	<select id="getFirstCategory" parameterType="com.javaex.vo.BlogVo" resultType="com.javaex.vo.BlogVo">
 		<![CDATA[
-			select p.post_title postTitle
+			select cateNo
+			from(select rownum rn
+			                ,cateNo cateNo
+			        from (select c.cate_no cateNo
+			                from users u, category c
+			                where u.id = c.id
+			                and u.id = #{id})
+			        where rownum = 1)
+		]]>
+	</select>
+	
+	<select id="getBlogPostList" parameterType="map" resultType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			select 	p.post_no postNo
+					,p.post_title postTitle
 			        ,p.reg_date postRegDate
 			        ,c.cate_name cateName
 			from post p, category c
 			where c.cate_no = p.cate_no
 			and c.id = #{id}
+			and c.cate_no = #{cateNo}
 		]]>
-			<if test = "cateName != null">
-				<![CDATA[
-					and c.cate_name = #{cateName}
-				]]>
-			</if>
-			<if test = "cateName == null">
-				<![CDATA[
-					and c.cate_name = '미분류'
-				]]>
-			</if>
-	</select> -->
+	</select>
+	<!-- 블로그 메인 -->
 	
-		<select id="getBlogPostList" parameterType="map" resultType="com.javaex.vo.BlogVo">
-			<![CDATA[
-				select p.post_title postTitle
-				        ,p.reg_date postRegDate
-				        ,c.cate_name cateName
-				from post p, category c
-				where c.cate_no = p.cate_no
-				and c.id = #{id}
-			]]>
-				<choose>
-					<when test="cateName != null">
-						<![CDATA[
-							and c.cate_name = #{cateName}
-						]]>
-					</when>
-					<otherwise>
-						<![CDATA[
-							and c.cate_name = '미분류'
-						]]>
-					</otherwise>
-				</choose>
-		</select>
+	<!-- 관리자 페이지 -->
+	<!-- 블로그 관리자 페이지 정보 가져오기 -->
+	<select id="getBlogAdminData" parameterType="map" resultType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			select id
+			        ,blog_title blogTitle
+			        ,logo_file logoFile
+			from blog
+			where id = #{id}
+		]]>
+	</select>
+	
+	<!-- 블로그 타이틀 변경 -->
+	<update id="updateBlog" parameterType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			update blog
+			set blog_title = #{blogTitle}
+				,logo_file = #{logoFile}
+			where id = #{id}
+		]]>
+	</update>
+	
+	<!-- 로고파일 주소 불러오기 -->
+	<select id="loadLogoFile" parameterType="com.javaex.vo.BlogVo" resultType="String">
+		<![CDATA[
+			select logo_file logoFile
+			from blog
+			where id = #{id}
+		]]>
+	</select>
+	
+	
+	<!-- 메인페이지 카테고리 선택 -->
+	<!-- 카테고리 최초 글 -->
+	<select id="getLatelyPostingInCategory" parameterType="com.javaex.vo.BlogVo" resultType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			select userName
+			        ,postTitle
+			        ,postRegDate
+			        ,postContent
+			from(select rownum rn
+			        ,a.userName userName
+			        ,a.postTitle postTitle
+			        ,a.postRegDate postRegDate
+			        ,a.postContent postContent
+				from (select u.user_name userName
+				            ,p.post_title postTitle
+				            ,p.reg_date postRegDate
+				            ,p.post_content postContent
+				        from users u, blog b, category c, post p
+				        where u.id = b.id
+				        and b.id = c.id
+				        and c.cate_no = p.cate_no
+				        and b.id = #{id}
+				        and c.cate_no = #{cateNo}
+				        order by p.reg_date desc)a
+			        )
+			where rownum = 1
+		]]>
+	</select>	
+	<!-- 카테고리 원하는 글 -->
+	<select id="getReadPosting" parameterType="com.javaex.vo.BlogVo" resultType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			select u.user_name userName
+	            ,p.post_title postTitle
+	            ,p.reg_date postRegDate
+	            ,p.post_content postContent
+	        from users u, blog b, category c, post p
+	        where u.id = b.id
+	        and b.id = c.id
+	        and c.cate_no = p.cate_no
+	        and b.id = #{id}
+	        and c.cate_no = #{cateNo}
+	        and p.post_no = #{postNo}
+		]]>
+	</select>	
+	<!-- 카테고리 선택 후 게시물 블러오기 -->
+	<select id="getBlogPostListInCategory" parameterType="map" resultType="com.javaex.vo.BlogVo">
+		<![CDATA[
+			select 	p.post_no postNo
+					,p.post_title postTitle
+			        ,p.reg_date postRegDate
+			        ,c.cate_name cateName
+			from post p, category c
+			where c.cate_no = p.cate_no
+			and c.id = #{id}
+			and c.cate_no = #{cateNo}
+		]]>
+	</select>
 
 	
 </mapper>

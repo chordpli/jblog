@@ -9,9 +9,11 @@ public class BlogVo {
 	private String userName;
 	
 	// category table
+	private int cateNo;
 	private String cateName;
 	
 	// post table
+	private int postNo;
 	private String postTitle;
 	private String postRegDate;
 	private String postContent;
@@ -35,6 +37,23 @@ public class BlogVo {
 		this.postTitle = postTitle;
 		this.postRegDate = postRegDate;
 		this.postContent = postContent;
+	}
+
+	
+	public int getCateNo() {
+		return cateNo;
+	}
+
+	public void setCateNo(int cateNo) {
+		this.cateNo = cateNo;
+	}
+
+	public int getPostNo() {
+		return postNo;
+	}
+
+	public void setPostNo(int postNo) {
+		this.postNo = postNo;
 	}
 
 	public String getId() {
@@ -104,8 +123,9 @@ public class BlogVo {
 	@Override
 	public String toString() {
 		return "BlogVo [id=" + id + ", blogTitle=" + blogTitle + ", logoFile=" + logoFile + ", userName=" + userName
-				+ ", cateName=" + cateName + ", postTitle=" + postTitle + ", postRegDate=" + postRegDate
-				+ ", postContent=" + postContent + "]";
+				+ ", cateNo=" + cateNo + ", cateName=" + cateName + ", postNo=" + postNo + ", postTitle=" + postTitle
+				+ ", postRegDate=" + postRegDate + ", postContent=" + postContent + "]";
 	}
+
 	
 }

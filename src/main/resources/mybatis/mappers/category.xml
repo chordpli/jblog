@@ -3,9 +3,72 @@
 
 <mapper namespace="category">
 
-	<insert id="insertBasicCategory" parameterType="String" >
-		insert into category
-		values(seq_category_no.nextval, #{id}, "미분류", "기본으로 만들어지는 카테고리 입니다.", sysdate)
+	<!-- 회원가입 시 카테고리 생성 -->
+	<insert id="insertBasicCategory" parameterType="String">
+		<![CDATA[
+			insert into category
+			values(seq_category_no.nextval, #{id}, '미분류', '기본으로 만들어지는 카테고리 입니다.', sysdate)
+		]]>
 	</insert>
+	
+	
+	<!-- 관리자 페이지 -->
+	
+	<!-- 카테고리 페이지 -->
+	<!-- 관리 카테고리 페이지에서 카테고리 리스트 가져오기. -->
+	<select id="categoryList" parameterType="com.javaex.vo.CategoryVo" resultType="com.javaex.vo.CategoryVo">
+		<![CDATA[
+			select rn
+			        ,cateNo
+			        ,cateName
+			        ,postCount
+			        ,description
+			from(select rownum rn
+			            ,cateNo
+			            ,cateName
+			            ,postCount
+			            ,description
+			        from (select c.cate_No cateNo,
+			                        c.cate_Name cateName,
+			                        c.description description,
+			                        c.reg_Date regDate,
+			                        count(p.cate_No) postCount
+			                 from category c, post p
+			                 where c.cate_No = p.cate_No(+)
+			                 and id='amfunm'
+			                group by c.cate_No, c.id, c.cate_Name, c.description, c.reg_Date
+			                order by c.cate_No asc)
+			            )
+		]]>
+	
+	</select>
+	
+	<!-- 카테고리 생성 -->
+	<insert id="insertNewCategory" parameterType="com.javaex.vo.CategoryVo">
+		<![CDATA[
+			insert into category
+			values(seq_category_no.nextval, #{id}, #{cateName}, #{description}, sysdate)
+		]]>
+	</insert>
+	<!-- 카테고리 삭제 -->
+	<delete id="deleteCateogry" parameterType="int">
+		<![CDATA[
+			delete from category
+			where cate_no = #{cateNo} 
+		]]>
+	</delete>
+	
+	<!-- 글쓰기 페이지 -->
+	<!-- 카테고리 이름 가져오기 -->
+	<select id="getCategoryName" parameterType="com.javaex.vo.CategoryVo" resultType="com.javaex.vo.CategoryVo">
+		<![CDATA[
+			select cate_name cateName
+					,cate_no cateNo
+			from category
+			where id = #{id}
+		]]>
+	
+	</select>
+	
 
 </mapper>

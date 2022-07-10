@@ -22,7 +22,7 @@
 				<div id="profile">
 					
 					<!-- 기본이미지 -->
-					<img id="proImg" src="${pageContext.request.contextPath}/assets/images/spring-logo.jpg">
+					<img id="proImg" src="${pageContext.request.contextPath}/upload/${blog.blogOneData.logoFile}">
 					
 					<!-- 사용자업로드 이미지 -->
 					<%-- <img id="proImg" src=""> --%>
@@ -35,7 +35,7 @@
 					</div>
 					<ul id="cateList" class="text-left">
 						<c:forEach items="${blog.cateList}" var = "cVo">
-							<li><a href="$}">${cVo.cateName }</a></li>
+							<li><a href="${pageContext.request.contextPath}/${id }/${cVo.cateNo }"> ${cVo.cateName } </a></li>
 						</c:forEach>
 						
 					</ul>
@@ -46,16 +46,16 @@
 			<div id="post_area">
 				
 				<c:choose>
-					<c:when test="${blog.latelyPosting != null }">
+					<c:when test="${blog.posting != null }">
 						<div id="postBox" class="clearfix">
-								<div id="postTitle" class="text-left"><strong>${blog.latelyPosting.postTitle}</strong></div>
-								<div id="postDate" class="text-left"><strong>${blog.latelyPosting.postRegDate}</strong></div>
+								<div id="postTitle" class="text-left"><strong>${blog.posting.postTitle}</strong></div>
+								<div id="postDate" class="text-left"><strong>${blog.posting.postRegDate}</strong></div>
 								<div id="postNick">${blog.blogOneData.userName }님</div>
 						</div>
 						<!-- //postBox -->
 					
 						<div id="post" >
-							${blog.latelyPosting.postContent }
+							${blog.posting.postContent }
 						</div>
 						<!-- //post -->
 					</c:when>
@@ -79,9 +79,9 @@
 							<col style="width: 20%;">
 						</colgroup>
 						
-						<c:forEach items="${blog.latelyPosting}" var = "post">
+						<c:forEach items="${blog.postList}" var = "post">
 							<tr>
-								<td class="text-left"><a href="">${post.postTitle }</a></td>
+								<td class="text-left"><a href="${pageContext.request.contextPath}/${id }/${post.postNo }">${post.postTitle }</a></td>
 								<td class="text-right">${post.postRegDate }</td>
 							</tr>
 						</c:forEach>

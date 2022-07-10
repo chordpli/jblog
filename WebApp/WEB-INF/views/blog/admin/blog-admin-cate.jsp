@@ -7,8 +7,11 @@
 <head>
 <meta charset="UTF-8">
 <title>JBlog</title>
+<!-- css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
 
+<!-- js -->
+<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery/jquery-1.12.4.js"></script>
 
 </head>
 
@@ -16,13 +19,13 @@
 	<div id="wrap">
 		
 		<!-- 개인블로그 해더 -->
-
+		<c:import url="/WEB-INF/views/includes/blog-header.jsp"></c:import>
 
 		<div id="content">
 			<ul id="admin-menu" class="clearfix">
-				<li class="tabbtn selected"><a href="">기본설정</a></li>
-				<li class="tabbtn"><a href="">카테고리</a></li>
-				<li class="tabbtn"><a href="">글작성</a></li>
+				<li class="tabbtn"><a href="${pageContext.request.contextPath}/${id}/admin/basic">기본설정</a></li>
+				<li class="tabbtn selected"><a href="${pageContext.request.contextPath}/${id}/admin/category">카테고리</a></li>
+				<li class="tabbtn"><a href="${pageContext.request.contextPath}/${id}/admin/writeform">글작성</a></li>
 			</ul>
 			<!-- //admin-menu -->
 			
@@ -47,24 +50,8 @@
 		      		</thead>
 		      		<tbody id="cateList">
 		      			<!-- 리스트 영역 -->
-		      			<tr>
-							<td>1</td>
-							<td>자바프로그래밍</td>
-							<td>7</td>
-							<td>자바기초와 객체지향</td>
-						    <td class='text-center'>
-						    	<img class="btnCateDel" src="${pageContext.request.contextPath}/assets/images/delete.jpg">
-						    </td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>오라클</td>
-							<td>5</td>
-							<td>오라클 설치와 sql문</td>
-						    <td class='text-center'>
-						    	<img class="btnCateDel" src="${pageContext.request.contextPath}/assets/images/delete.jpg">
-						    </td>
-						</tr>
+		      			
+		      			
 						<!-- 리스트 영역 -->
 					</tbody>
 				</table>
@@ -95,13 +82,170 @@
 		
 		
 		<!-- 개인블로그 푸터 -->
-		
+		<c:import url="/WEB-INF/views/includes/blog-footer.jsp"></c:import>
 	
 	
 	</div>
 	<!-- //wrap -->
 </body>
+<script type="text/javascript">
+/* 준비가 끝났을 때  */
+$(document).ready(function(){
+	
+	/* 리스트 요청 + 그리기 */
+	fetchList()
+});
 
+/* 새로고침 */
+function refreshMemList(){
+	location.reload();
+}
+
+/* 리스트 요청 */
+function fetchList(){
+	
+	console.log("fetchList()");
+	
+	$.ajax({
+		
+		url : "${pageContext.request.contextPath }/{id}/admin/category/list",		
+		type : "post",
+		//contentType : "application/json",
+		//data : {name: ”홍길동"},
+		
+		dataType : "json",
+		success : function(cList){
+			//화면 data + html 그린다
+			for(var i=0; i<cList.length; i++){
+				render(cList[i]);  //vo --> 화면에 그린다.
+			}
+		},
+		error : function(XHR, status, error) {
+			console.error(status + " : " + error);
+		}
+	});
+}
+
+
+/* 리스트 그리기 1개씩*/
+function render(cList){
+	console.log("render()");
+
+	var str = '';
+	str += '	<tr>' ;
+	str += '		<td>'+cList.rn+'</td>' ;
+	str += '		<td>'+cList.cateName+'</td>' ;
+	str += '		<td>'+cList.postCount+'</td>' ;
+	str += '		<td>'+cList.description+'</td>';
+	str += '	    <td class="text-center">' ;
+	str += '	    	<img class="btnCateDel" data-postcount= "'+cList.postCount+'" data-cateno="'+cList.cateNo+'" src="${pageContext.request.contextPath}/assets/images/delete.jpg">' ;
+	str += '	    </td>';
+	str += '	</tr>';
+	
+	$("#cateList").prepend(str);
+	
+}
+
+
+/* 추가버튼 클릭할 때 */
+$("#btnAddCate").on("click", function(){
+	console.log("카테고리 추가 클릭");
+	
+	// 데이터 모으기
+	
+	var cateName = $('#admin-cate-add [name = name]').val();
+	var description = $('#admin-cate-add [name = desc]').val();
+	
+	var CategoryVo = {
+			cateName: cateName,
+			description: description
+	};
+	
+	
+	console.log(CategoryVo);
+	
+ 	$.ajax({
+		
+		url : "${pageContext.request.contextPath }/{id}/admin/category/insertCategory",		
+		type : "post",
+		contentType : "application/json",
+		data : JSON.stringify(CategoryVo),
+		dataType : "json",
+		success : function(result){
+			//성공시 처리해야될 코드 작성
+			console.log(result);
+			
+			//성공이면 지우고
+			if(result == "success"){
+				console.log("성공");
+				$("#cateList").empty();
+			 	fetchList();
+			 	
+			 	$("[name = name]").val("");
+			 	$("[name = desc]").val("");
+
+			}else {
+				console.log("실패");
+			}
+			
+		},
+		error : function(XHR, status, error) {
+			console.error(status + " : " + error);
+		}
+	}); 
+	//성공이면 리스트에서 제거하기
+	
+	//모달창 닫기
+	
+ 	
+	
+});
+
+/* 삭제버튼 클릭할 때 */
+$("#cateList").on("click", ".btnCateDel", function(){
+	console.log("카테고리 삭제 클릭");
+	var $this = $(this);
+	var cateNo = $this.data("cateno");
+	var postCount = $this.data("postcount");
+	
+	console.log(cateNo);
+	console.log(postCount);
+	
+ 	if(postCount > 0){
+ 		alert("삭제할 수 없습니다.");
+ 	}else{
+ 		$.ajax({
+ 			
+ 			url : "${pageContext.request.contextPath }/{id}/admin/category/deleteCategory",		
+ 			type : "post",
+ 			contentType : "application/json",
+ 			data : JSON.stringify(cateNo),
+ 			dataType : "json",
+ 			success : function(result){
+ 				//성공시 처리해야될 코드 작성
+ 				console.log(result);
+ 				
+ 				//성공이면 지우고
+ 				if(result == "success"){
+ 					console.log("성공");
+ 					$("#cateList").empty();
+ 				 	fetchList();
+ 				 	
+ 				 	
+ 				}else {
+ 					console.log("실패");
+ 				}
+ 				
+ 			},
+ 			error : function(XHR, status, error) {
+ 				console.error(status + " : " + error);
+ 			}
+ 		});
+ 	}
+});
+
+
+</script>
 
 
 
