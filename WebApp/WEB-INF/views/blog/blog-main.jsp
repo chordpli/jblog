@@ -81,7 +81,15 @@
 						
 						<c:forEach items="${blog.postList}" var = "post">
 							<tr>
-								<td class="text-left"><a href="${pageContext.request.contextPath}/${id }/${cateNo }/${post.postNo }">${post.postTitle }</a></td>
+								<c:choose>
+									<c:when test="${cateNo != null }">
+										<td class="text-left"><a href="${pageContext.request.contextPath}/${id }/${cateNo }/${post.postNo }">${post.postTitle }</a></td>	
+									</c:when>
+									<c:otherwise>
+										<td class="text-left"><a href="${pageContext.request.contextPath}/${id }/${post.cateNo }/${post.postNo }">${post.postTitle }</a></td>
+									</c:otherwise>
+								</c:choose>
+								
 								<td class="text-right">${post.postRegDate }</td>
 							</tr>
 						</c:forEach>

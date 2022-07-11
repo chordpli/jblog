@@ -181,7 +181,7 @@ div#footer		{ color:#666 }
 
 
 /* 개인블로그 오른쪽영역(글리스트) */
-#post_area {}
+/* #post_area {} */
 #post_area #list #listTitle {width: 100%; margin: 50px 0px 5px 0px; padding: 0px 5px 3px 5px; border-bottom: 1px solid #808080; }
 #post_area #list table {width: 100%; border-collapse: collapse; font-size: 13px;}
 #post_area #list table tr {border-bottom: 1px solid #B7B7B7; }

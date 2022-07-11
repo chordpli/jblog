@@ -36,7 +36,10 @@ public class BlogController {
 	
 	///////////////////////////////// 블로그 메인 /////////////////////////////////
 	// 블로그 메인
-		@RequestMapping(value = {"/{id}", "/{id}/{cateNo}/{postNo}", "/{id}/{cateNo}"}, method = {RequestMethod.GET, RequestMethod.POST})
+		@RequestMapping(value = {"/{id:(?!assets|upload).*}"
+								, "/{id:(?!assets|upload).*}/{cateNo}/{postNo}"
+								, "/{id:(?!assets|upload).*}/{cateNo:(?!postNo).*}"
+								, "/{id:(?!assets|upload).*}/{postNo:(?!cateNo).*}"})
 		public String blog(@PathVariable("id") String id
 							,@PathVariable(value = "cateNo", required = false) Integer cateNo
 							,@PathVariable(value = "postNo", required = false) Integer postNo
@@ -61,47 +64,7 @@ public class BlogController {
 			
 			return "blog/blog-main";
 		}
-	/*	
-	// 블로그 메인
-	@RequestMapping(value = {"/{id}", "/{id}/{cateNo}", "/{id}/{cateNo}/{postNo}"}, method = {RequestMethod.GET, RequestMethod.POST})
-	public String blog(@PathVariable("id") String id
-						,@PathVariable(value = "cateName", required = false) String cateName
-						,@PathVariable(value = "cateNo", required = false) int cateNo
-						,@PathVariable(value = "postNo", required = false) int postNo
-						, Model model) {
-		System.out.println("BlogController > blog");
-		Map <String, Object> bMap;
-		
-		if(cateNo == 0) {
-			
-		}
-		bMap = bService.getBlogData(id, cateName);
-		
-		System.out.println(bMap.get("cateList"));
-		model.addAttribute("blog", bMap);
-		
-		return "blog/blog-main";
-	}
-	
-	// 블로그 메인 카테고리 선택
-	
-	@RequestMapping(value = "/{id}/{cateNo}/{postNo}", method = {RequestMethod.GET, RequestMethod.POST})
-	public String Read(@PathVariable("id") String id
-						,@PathVariable(value = "cateNo", required = false) int cateNo
-						,@PathVariable(value = "postNo", required = false) int postNo
-						, Model model) {
-		System.out.println("BlogController > blog > Read");
-		Map <String, Object> bMap;
-		
-		bMap = bService.getBlogDataInCategory(id, cateNo, postNo);
-		
-		System.out.println(bMap.get("cateList"));
-		model.addAttribute("blog", bMap);
-		
-		return "blog/blog-main";
-	}
-	
-	*/
+
 	
 	
 	///////////////////////////////// 블로그 메인 /////////////////////////////////

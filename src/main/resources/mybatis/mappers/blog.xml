@@ -97,6 +97,7 @@
 					,p.post_title postTitle
 			        ,p.reg_date postRegDate
 			        ,c.cate_name cateName
+			        ,c.cate_no cateNo
 			from post p, category c
 			where c.cate_no = p.cate_no
 			and c.id = #{id}
