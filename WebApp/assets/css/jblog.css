@@ -178,6 +178,28 @@ div#footer		{ color:#666 }
 #post_area #postBox #postNick		{width: 100px; float: left; width: 150px; text-align: left;}
 #post_area #post					{padding: 20px 10px 20px 10px; border-bottom: 3px solid #808080; text-align: left;}
 
+/* 추가과제 개인블로그 오른쪽 영역(댓글reply) */
+#post_area #reply_area								{padding: 0px; display: inline-block;}
+#post_area #reply_area #postReplyArea				{padding: 10px 10px;}
+#post_area #reply_area #postReplyArea table			{padding: 0px 0px 2px 0px; border: 1px solid #808080; border-collapse: collapse;}
+#post_area #reply_area #postReplyArea table td 		{padding: 0px 0px 2px 0px; border: 1px solid #808080;}
+#post_area #reply_area #postReplyArea #postReplyID	{width: 150px; padding: 2px 0px 2px 0px; font-size: 16px;}
+#post_area #reply_area #postReplyArea #replyValue	{width: 420px; margin: 5px; padding: 2px 10px 2px 10px; text-align: right;}
+#post_area #reply_area #postReplyArea #postReply	{width: 70px; margin: 5px; text-align: center;}
+
+
+/* 추가과제 개인블로그 오른쪽 영역(댓글List) */
+#post_area #reply_area #replyList					{padding: 10px 10px 0px 0px; display: inline-block;}
+#post_area #reply_area #replyList table				{padding: 0px 0px 5px 0px; }
+#post_area #reply_area #replyList table td 			{padding: 0px 0px 5px 0px; }
+#post_area #reply_area #replyList #replyWriter		{width: 150px; padding: 2px 0px 2px 0px; font-size: 16px;}
+#post_area #reply_area #replyList #replyContent		{width: 330px; margin: 5px 10px; padding: 2px 15px 2px 15px; text-align: left;}
+#post_area #reply_area #replyList #replyDate		{width: 100px; margin: 5px; text-align: center;}
+#post_area #reply_area #replyList #btnDelReply		{width: 70px; margin: 5px; text-align: center;}
+/* #post_area #reply_area #replyList #postReplyID	{width: 400px; float: left; padding: 5px 0px 0px 0px; font-size: 22px;}
+#post_area #reply_area #replyList #replyValue	{width: 380px; float: right; text-align: right;}
+#post_area #reply_area #replyList  #postReply	{width: 180px; float: left; text-align: left;} */
+
 
 
 /* 개인블로그 오른쪽영역(글리스트) */

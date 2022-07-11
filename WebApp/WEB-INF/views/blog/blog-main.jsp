@@ -71,6 +71,46 @@
 						</div>
 					</c:otherwise>
 				</c:choose>
+				
+				<!-- reply area -->
+				<div id = "reply_area">
+					<div id = "postReplyArea">
+						<table>
+							<c:if test="${authUser != null }">
+								<tr>
+									<td id = "postReplyID">${loginId}</td>
+									<td><input type="text" id="replyValue" value=""></td>
+									<td><button type="button" id="postReply">저장</button></td>
+								</tr>
+							</c:if>
+						</table>
+					</div>
+					
+					<div id = "replyList">
+						<table>
+							<tr>
+								<td id = "replyWriter">코멘트 작성자</td>
+								<td id = "replyContent">내용</td>
+								<td id = "replyDate">날짜</td>
+								<td id = "btnDelReply">삭제버튼</td>
+							</tr>
+							<tr>
+								<td id = "replyWriter">코멘트 작성자</td>
+								<td id = "replyContent">내용</td>
+								<td id = "replyDate">날짜</td>
+								<td id = "btnDelReply">삭제버튼</td>
+							</tr>
+							<tr>
+								<td id = "replyWriter">코멘트 작성자</td>
+								<td id = "replyContent">내용</td>
+								<td id = "replyDate">날짜</td>
+								<td id = "btnDelReply">삭제버튼</td>
+							</tr>
+						</table>
+					</div>
+				
+				</div>
+						
 				<div id="list">
 					<div id="listTitle" class="text-left"><strong>카테고리의 글</strong></div>
 					<table>

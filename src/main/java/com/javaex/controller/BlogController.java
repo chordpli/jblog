@@ -43,8 +43,14 @@ public class BlogController {
 		public String blog(@PathVariable("id") String id
 							,@PathVariable(value = "cateNo", required = false) Integer cateNo
 							,@PathVariable(value = "postNo", required = false) Integer postNo
+							, HttpSession session
 							, Model model) {
 			System.out.println("BlogController > blog");
+			
+			System.out.println("BlogController > adminBasic");
+			
+			UsersVo user = (UsersVo) session.getAttribute("authUser");
+			
 			Map <String, Object> bMap;
 			
 			if(cateNo == null && postNo == null) {
@@ -61,6 +67,10 @@ public class BlogController {
 			
 			System.out.println(bMap.get("cateList"));
 			model.addAttribute("blog", bMap);
+			
+			if(user != null) {
+				model.addAttribute("loginId", user.getId());
+			}
 			
 			return "blog/blog-main";
 		}
